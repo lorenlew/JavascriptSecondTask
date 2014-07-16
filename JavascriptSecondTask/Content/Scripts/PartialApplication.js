@@ -1,23 +1,27 @@
-﻿(function partialApplication() {
-    'use strict';
+﻿!function ()
+{
+    function partial(handler)
+    {
+        var slice = Array.prototype.slice;
+        var highOrderArguments = slice.call(arguments, 1);
 
-    var __map = [].map;
-
-    function applyHandlerToObject(list, unaryFunc) {
-        return __map.call(list, unaryFunc);
-    }
-
-    function applyHandlerToObjectWrapper(unaryFunc) {
-        return function(list) {
-            return applyHandlerToObject(list, unaryFunc);
+        return function ()
+        {
+            var lowOrderArguments = slice.call(arguments, 0);
+            var allArguments = highOrderArguments.concat(lowOrderArguments);
+            return handler.apply(this, allArguments);
         };
     }
 
-    function square(n) {
-        return n * n;
+    function sum()
+    {
+        var totalSum = 0;
+        for (var i = 0; i < arguments.length; i++) {
+            totalSum += arguments[i];
+        }
+        return totalSum;
     }
 
-    partialApplication.squareAllWithPartial = applyHandlerToObjectWrapper(square);
-
-    console.log("squareAllWithPartial - " + partialApplication.squareAllWithPartial([1, 2, 3, 4, 5]));
-})();
+    var result = partial(sum, 1, 2, 3)(4, 5);
+    console.log('partial(sum, 1, 2, 3)(4, 5) = ' + result);
+}()
