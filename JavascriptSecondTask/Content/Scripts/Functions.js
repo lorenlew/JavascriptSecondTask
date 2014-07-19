@@ -132,16 +132,25 @@
         ', functionApplication.isEven)) = ' + averageOfEvenNumbersResult);
 
     self.getSumOfRandomNumbers = function (amount) {
-        var randomArray = [];
+        var arrayOfRandomNumbers = [];
         var i;
         for (i = 0; i < amount; i += 1) {
-            randomArray.push(Math.random() * 100);
+            arrayOfRandomNumbers.push(Math.random() * 100);
         }
-        var sumOfRandomNumbers = self.sumRecursive(randomArray, 0);
+        var sumOfRandomNumbers = self.sumRecursive(arrayOfRandomNumbers, 0);
         return sumOfRandomNumbers;
     };
 
     var sumOfRandomNumbersResult = self.getSumOfRandomNumbers(10);
     console.log('functionApplication.getSumOfRandomNumbers(10) = ' + sumOfRandomNumbersResult);
+
+    self.firstSatisfying = function (array, isMatching) {
+        var arrayOfMatchingValues = self.find(array, isMatching);
+        var firstMatching = self.first(arrayOfMatchingValues);
+        return firstMatching;
+    };
+    var firstMatchingResult = self.firstSatisfying([1, 3, 15, 23, 100], self.shareOnFive);
+    console.log('functionApplication.firstSatisfying([1, 3, 15, 23, 100], ' +
+        'functionApplication.shareOnFive) = ' + firstMatchingResult);
 
 }(window.functionApplication = window.functionApplication || {}));
