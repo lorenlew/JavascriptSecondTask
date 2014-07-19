@@ -131,4 +131,17 @@
     console.log('functionApplication.getAverage(functionApplication.find([1, 3, 8, 15, 24, 38]' +
         ', functionApplication.isEven)) = ' + averageOfEvenNumbersResult);
 
+    self.getSumOfRandomNumbers = function (amount) {
+        var randomArray = [];
+        var i;
+        for (i = 0; i < amount; i += 1) {
+            randomArray.push(Math.random() * 100);
+        }
+        var sumOfRandomNumbers = self.sumRecursive(randomArray, 0);
+        return sumOfRandomNumbers;
+    };
+
+    var sumOfRandomNumbersResult = self.getSumOfRandomNumbers(10);
+    console.log('functionApplication.getSumOfRandomNumbers(10) = ' + sumOfRandomNumbersResult);
+
 }(window.functionApplication = window.functionApplication || {}));
