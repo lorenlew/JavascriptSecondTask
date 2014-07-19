@@ -100,4 +100,30 @@
     var findReult = self.find([1, 3, 5, 15, 23, 100], self.shareOnFive);
     console.log('functionApplication.find([1, 3, 5, 15, 23, 100], functionApplication.shareOnFive) = ' + findReult);
 
+    self.isEven = function (i) {
+        return i % 2 === 0;
+    };
+
+    self.add = function (a, b) {
+        return a + b;
+    };
+
+    self.foldRecursive = function (array, combineFunction, initialValue) {
+        if (self.isEmpty(array)) {
+            return initialValue;
+        }
+        return combineFunction(self.first(array), self.foldRecursive(self.rest(array), combineFunction, initialValue));
+    };
+
+    self.sumRecursive = function (array, initialValue) {
+        return self.foldRecursive(array, self.add, initialValue);
+    };
+
+    var foldSumResult = self.sumRecursive([1, 3, 5, 15, 23, 100], 0);
+    console.log('functionApplication.sumRecursive([1, 3, 5, 15, 23, 100], 0) = ' + foldSumResult);
+
+
+
+
+
 }(window.functionApplication = window.functionApplication || {}));
