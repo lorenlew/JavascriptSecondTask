@@ -76,11 +76,28 @@
         return [handler(self.first(array))].concat(self.rest(array).map(handler));
     };
 
-    function square(i) {
+    self.square = function (i) {
         return i * i;
-    }
+    };
+    var mapResult = self.map([1, 2, 3, 4, 5], self.square);
+    console.log('functionApplication.map([1, 2, 3, 4, 5], functionApplication.square) = ' + mapResult);
 
-    var mapResult = self.map([1, 2, 3, 4, 5], square);
-    console.log('functionApplication.map([1, 2, 3, 4, 5], square) = ' + mapResult);
+
+    self.find = function (array, isMatching) {
+        var matches = [];
+        var i;
+        for (i = 0; i < array.length; i++) {
+            if (isMatching(array[i])) {
+                matches.push(array[i]);
+            }
+        }
+        return matches;
+    };
+
+    self.shareOnFive = function (i) {
+        return i % 5 === 0;
+    };
+    var findReult = self.find([1, 3, 5, 15, 23, 100], self.shareOnFive);
+    console.log('functionApplication.find([1, 3, 5, 15, 23, 100], functionApplication.shareOnFive) = ' + findReult);
 
 }(window.functionApplication = window.functionApplication || {}));
