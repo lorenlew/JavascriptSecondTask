@@ -79,8 +79,8 @@
     self.square = function (i) {
         return i * i;
     };
-    var mapResult = self.map([1, 2, 3, 4, 5], self.square);
-    console.log('functionApplication.map([1, 2, 3, 4, 5], functionApplication.square) = ' + mapResult);
+    var mapSquareResult = self.map([1, 2, 3, 4, 5], self.square);
+    console.log('functionApplication.map([1, 2, 3, 4, 5], functionApplication.square) = ' + mapSquareResult);
 
 
     self.find = function (array, isMatching) {
@@ -97,8 +97,8 @@
     self.shareOnFive = function (i) {
         return i % 5 === 0;
     };
-    var findReult = self.find([1, 3, 5, 15, 23, 100], self.shareOnFive);
-    console.log('functionApplication.find([1, 3, 5, 15, 23, 100], functionApplication.shareOnFive) = ' + findReult);
+    var findResult = self.find([1, 3, 5, 15, 23, 100], self.shareOnFive);
+    console.log('functionApplication.find([1, 3, 5, 15, 23, 100], functionApplication.shareOnFive) = ' + findResult);
 
     self.isEven = function (i) {
         return i % 2 === 0;
@@ -122,8 +122,13 @@
     var foldSumResult = self.sumRecursive([1, 3, 5, 15, 23, 100], 0);
     console.log('functionApplication.sumRecursive([1, 3, 5, 15, 23, 100], 0) = ' + foldSumResult);
 
+    self.getAverage = function (array) {
+        var averageValue = self.sumRecursive(array, 0) / array.length;
+        return averageValue;
+    };
 
-
-
+    var averageOfEvenNumbersResult = self.getAverage(self.find([1, 3, 8, 15, 24, 38], self.isEven));
+    console.log('functionApplication.getAverage(functionApplication.find([1, 3, 8, 15, 24, 38]' +
+        ', functionApplication.isEven)) = ' + averageOfEvenNumbersResult);
 
 }(window.functionApplication = window.functionApplication || {}));
