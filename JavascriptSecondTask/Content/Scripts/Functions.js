@@ -122,6 +122,26 @@
     var foldSumResult = self.sumRecursive([1, 3, 5, 15, 23, 100], 0);
     console.log('functionApplication.sumRecursive([1, 3, 5, 15, 23, 100], 0) = ' + foldSumResult);
 
+    self.unfold = function (computingFunction, initialValue, boundaryValue) {
+        var computedSequence = [initialValue];
+
+        return (function callbackFunction(currentValue) {
+            var nextValue = computingFunction(currentValue, boundaryValue);
+            if (nextValue) {
+                computedSequence.push(nextValue);
+                return callbackFunction(nextValue);
+            }
+            return computedSequence;
+        }(initialValue));
+    };
+
+    self.getDoubleValue = function (currentValue, boundaryValue) {
+        return currentValue < boundaryValue ? currentValue * 2 : false;
+    };
+
+    var unfoldResult = self.unfold(self.getDoubleValue, 8, 4000);
+    console.log('functionApplication.unfold(functionApplication.getDoubleValue, 8, 4000)= ' + unfoldResult);
+
     self.getAverage = function (array) {
         var averageValue = self.sumRecursive(array, 0) / array.length;
         return averageValue;
@@ -165,29 +185,30 @@
     var lazyFunctionResult = lazyFunction();
     console.log('functionApplication.lazy(functionApplication.sumAll, 1, 5, 13 )()= ' + lazyFunctionResult);
 
-    self.getFibonacciNumbers = function (a, b) {
+    self.generateFibonacciNumbers = function (a, b) {
         var c = a + b;
         return {
             current: c,
             reInitializeFib: function () {
-                return self.getFibonacciNumbers(b, c);
+                return self.generateFibonacciNumbers(b, c);
             }
         };
     };
 
-    self.take = function (n, fibInitial) {
+    self.getFibonacciNumbers = function (fibInitial, amount) {
         var fibNumbersArray = [];
         var fibNumbersGenerator = fibInitial;
         var i;
-        for (i = 0; i < n; i++) {
+        for (i = 0; i < amount; i++) {
             fibNumbersArray.push(fibNumbersGenerator.current);
             fibNumbersGenerator = fibNumbersGenerator.reInitializeFib();
         }
         return fibNumbersArray;
     };
 
-    var fibNumbersResult = self.take(10, self.getFibonacciNumbers(1, 1));
-    console.log('functionApplication.take(10, functionApplication.getFibonacciNumbers(1, 1))= ' + fibNumbersResult);
+    var fibNumbersResult = self.getFibonacciNumbers(self.generateFibonacciNumbers(1, 1), 10);
+    console.log('functionApplication.getFibonacciNumbers(functionApplication.generateFibonacciNumbers(1, 1), 10)' +
+        '= ' + fibNumbersResult);
 
     self.getFuncName = function (callback) {
         var name = callback.toString();
@@ -200,23 +221,29 @@
         var funcName = [self.getFuncName(func)];
         return function () {
             var allArguments = Array.prototype.slice.call(arguments);
+            if (self.isEmpty(allArguments)) {
+                throw Error('No argument provided');
+            }
             var funcHash = funcName.concat(allArguments);
             if (!cache[funcHash]) {
-                cache[funcHash] = func.apply(this, Array.prototype.slice.call(allArguments));
+                var functionResult = func.apply(this, Array.prototype.slice.call(allArguments));
+                if (isNaN(functionResult)) {
+                    throw Error('NaN result');
+                }
+                cache[funcHash] = functionResult;
             }
             return cache[funcHash];
         };
     };
-
     self.getFibonacciNumber = function (num) {
         return (num < 2) ? num : self.getFibonacciNumber(num - 1) + self.getFibonacciNumber(num - 2);
     };
 
+    self.getFibonacciNumber(4);
     self.memoizeFib = self.memoize(self.getFibonacciNumber);
     console.log('functionApplication.memoizeFib(4)= ', self.memoizeFib(4));
     console.log('functionApplication.memoizeFib(5)= ', self.memoizeFib(5));
     console.log('functionApplication.memoizeFib(6)= ', self.memoizeFib(6));
     console.log('functionApplication.memoizeFib(7)= ', self.memoizeFib(7));
-
 
 }(window.functionApplication = window.functionApplication || {}));
