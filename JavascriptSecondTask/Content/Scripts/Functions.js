@@ -153,4 +153,41 @@
     console.log('functionApplication.firstSatisfying([1, 3, 15, 23, 100], ' +
         'functionApplication.shareOnFive) = ' + firstMatchingResult);
 
+    self.lazy = function (handler) {
+        var parameters = Array.prototype.slice.call(arguments, 1);
+        var lazyEvaluatedFunction = function () {
+            return handler.apply(null, parameters);
+        };
+        return lazyEvaluatedFunction;
+    };
+
+    var lazyFunction = self.lazy(self.sumAll, 1, 5, 13);
+    var lazyFunctionResult = lazyFunction();
+    console.log('functionApplication.lazy(functionApplication.sumAll, 1, 5, 13 )()= ' + lazyFunctionResult);
+
+    self.getFibonacciNumbers = function (a, b) {
+        var c = a + b;
+        return {
+            current: c,
+            reInitializeFib: function () {
+                return self.getFibonacciNumbers(b, c);
+            }
+        };
+    };
+
+    self.take = function (n, fibInitial) {
+        var fibNumbersArray = [];
+        var fibNumbersGenerator = fibInitial;
+
+        for (var i = 0; i < n; i++) {
+            fibNumbersArray.push(fibNumbersGenerator.current);
+            fibNumbersGenerator = fibNumbersGenerator.reInitializeFib();
+        }
+        return fibNumbersArray;
+    };
+
+    var fibNumbersResult = self.take(10, self.getFibonacciNumbers(1, 1));
+    console.log('functionApplication.take(10, functionApplication.getFibonacciNumbers(1, 1))= ' + fibNumbersResult);
+
+
 }(window.functionApplication = window.functionApplication || {}));
