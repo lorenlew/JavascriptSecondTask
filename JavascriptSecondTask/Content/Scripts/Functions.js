@@ -178,8 +178,8 @@
     self.take = function (n, fibInitial) {
         var fibNumbersArray = [];
         var fibNumbersGenerator = fibInitial;
-
-        for (var i = 0; i < n; i++) {
+        var i;
+        for (i = 0; i < n; i++) {
             fibNumbersArray.push(fibNumbersGenerator.current);
             fibNumbersGenerator = fibNumbersGenerator.reInitializeFib();
         }
@@ -188,6 +188,35 @@
 
     var fibNumbersResult = self.take(10, self.getFibonacciNumbers(1, 1));
     console.log('functionApplication.take(10, functionApplication.getFibonacciNumbers(1, 1))= ' + fibNumbersResult);
+
+    self.getFuncName = function (callback) {
+        var name = callback.toString();
+        var reg = /function ([^\(]*)/;
+        return reg.exec(name)[1];
+    };
+
+    self.memoize = function (func) {
+        var cache = window.cache || {};
+        var funcName = [self.getFuncName(func)];
+        return function () {
+            var allArguments = Array.prototype.slice.call(arguments);
+            var funcHash = funcName.concat(allArguments);
+            if (!cache[funcHash]) {
+                cache[funcHash] = func.apply(this, Array.prototype.slice.call(allArguments));
+            }
+            return cache[funcHash];
+        };
+    };
+
+    self.getFibonacciNumber = function (num) {
+        return (num < 2) ? num : self.getFibonacciNumber(num - 1) + self.getFibonacciNumber(num - 2);
+    };
+
+    self.memoizeFib = self.memoize(self.getFibonacciNumber);
+    console.log('functionApplication.memoizeFib(4)= ', self.memoizeFib(4));
+    console.log('functionApplication.memoizeFib(5)= ', self.memoizeFib(5));
+    console.log('functionApplication.memoizeFib(6)= ', self.memoizeFib(6));
+    console.log('functionApplication.memoizeFib(7)= ', self.memoizeFib(7));
 
 
 }(window.functionApplication = window.functionApplication || {}));
